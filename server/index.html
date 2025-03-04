@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webcam Capture</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #13131f;
+            color: white;
+            margin: 20px;
+        }
+
+        video,
+        canvas {
+            display: block;
+            margin: 10px auto;
+            border: 2px solid white;
+            border-radius: 10px;
+        }
+
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4A90E2;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #357ABD;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Webcam Capture & Save</h1>
+
+    <video id="webcam" width="500" height="350" autoplay></video>
+
+    <button id="startCam">Start Camera</button>
+    <button id="stopCam">Stop Camera</button>
+    <button id="capture">Capture 20 Images</button>
+
+    <canvas id="canvas" width="500" height="350"></canvas>
+
+    <script>
+        const video = document.getElementById("webcam");
+        const startBtn = document.getElementById("startCam");
+        const stopBtn = document.getElementById("stopCam");
+        const captureBtn = document.getElementById("capture");
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        let stream = null;
+
+        // Start Webcam
+        startBtn.addEventListener("click", async () => {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                video.srcObject = stream;
+            } catch (error) {
+                console.error("Error accessing webcam:", error);
+                alert("Error accessing webcam! Make sure it's not being used by another application.");
+            }
+        });
+
+        // Stop Webcam
+        stopBtn.addEventListener("click", () => {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                video.srcObject = null;
+            }
+        });
+
+        // Capture 20 Images
+        captureBtn.addEventListener("click", async () => {
+            for (let i = 1; i <= 20; i++) {
+                await new Promise(resolve => setTimeout(resolve, 500)); // 500ms delay
+
+                // Capture image
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                // Convert canvas to image data
+                const imageData = canvas.toDataURL("image/png");
+
+                // Send image to server
+                fetch("/upload", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ image: imageData, filename: `image_${i}.png` })
+                })
+                    .then(response => response.json())
+                    .then(data => console.log(`Image ${i} saved:`, data))
+                    .catch(error => console.error("Error saving image:", error));
+            }
+            alert("All 20 images captured and saved!");
+        });
+    </script>
+
+</body>
+
+</html>
