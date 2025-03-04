@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="emp_details_style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.lordicon.com/lordicon.js"></script>
+</head>
+
+<body>
+
+    <div class="container">
+        <aside class="sidebar">
+            <lord-icon src="https://cdn.lordicon.com/eouimtlu.json" trigger="hover" colors="primary:#ffffff"
+                style="width:60px;height:50px">
+            </lord-icon>
+            <nav>
+                <a href="mngr_dashboard.html">
+                    <lord-icon class="icon" src="https://cdn.lordicon.com/cnpvyndp.json" trigger="hover"
+                        colors="primary:#ffffff" style="width:50px;height:50px">
+                    </lord-icon>
+                    <span>Home</span>
+                </a>
+                <a href="emp_details.html">
+                    <lord-icon src="https://cdn.lordicon.com/xmaezqzk.json" trigger="hover" stroke="bold"
+                        colors="primary:#ffffff,secondary:#e4e4e4" style="width:50px;height:50px">
+                    </lord-icon>
+                    <span>Details</span>
+                </a>
+                <a href="new_emp_details.html">
+                    <lord-icon src="https://cdn.lordicon.com/sbnjyzil.json" trigger="hover" stroke="bold"
+                        colors="primary:#ffffff,secondary:#e4e4e4" style="width:50px;height:50px">
+                    </lord-icon>
+                    <span>
+                        New Entry
+                    </span>
+                </a>
+                <a href="login.html">
+                    <lord-icon src="https://cdn.lordicon.com/gwvmctbb.json" trigger="hover" stroke="bold"
+                        colors="primary:#ffffff,secondary:#e4e4e4" style="width:50px;height:50px">
+                    </lord-icon>
+                    <span>Logout</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header>
+                <!-- Top Bar -->
+                <div class="top-right">
+                    <button class="profession-btn">PROFESSION, NAME</button>
+                    <div class="profile-pic"><img src="images/profile.jpg"></img></div>
+                    <button class=" dark-toggle">DARK TOGGLE</button>
+                </div>
+            </header>
+            <div class="dashboard">
+
+                <!-- Student List Card -->
+                <div class="card">
+                    <div class="student-list">
+                        <div class="student">
+                            <span>Employee 1</span>
+                            <div class="student-buttons">
+                                <button><lord-icon src="https://cdn.lordicon.com/exymduqj.json" trigger="hover"
+                                        stroke="bold" colors="primary:#ffffff,secondary:#ffffff"
+                                        style="width:35px;height:35px">
+                                    </lord-icon></button>
+                                <button><lord-icon src="https://cdn.lordicon.com/hwjcdycb.json" trigger="hover"
+                                        stroke="bold" colors="primary:#ffffff,secondary:#ffffff"
+                                        style="width:35px;height:35px">
+                                    </lord-icon></button>
+                            </div>
+                        </div>
+                        <div class="student">
+                            <span>Employee 1</span>
+                            <div class="student-buttons">
+                                <button><lord-icon src="https://cdn.lordicon.com/exymduqj.json" trigger="hover"
+                                        stroke="bold" colors="primary:#ffffff,secondary:#ffffff"
+                                        style="width:35px;height:35px">
+                                    </lord-icon></button>
+                                <button><lord-icon src="https://cdn.lordicon.com/hwjcdycb.json" trigger="hover"
+                                        stroke="bold" colors="primary:#ffffff,secondary:#ffffff"
+                                        style="width:35px;height:35px">
+                                    </lord-icon></button>
+                            </div>
+                        </div>
+                        <div class="student">
+                            <span>Employee 3</span>
+                            <div class="student-buttons">
+                                <button><lord-icon src="https://cdn.lordicon.com/exymduqj.json" trigger="hover"
+                                        stroke="bold" colors="primary:#ffffff,secondary:#ffffff"
+                                        style="width:35px;height:35px">
+                                    </lord-icon></button>
+                                <button><lord-icon src="https://cdn.lordicon.com/hwjcdycb.json" trigger="hover"
+                                        stroke="bold" colors="primary:#ffffff,secondary:#ffffff"
+                                        style="width:35px;height:35px">
+                                    </lord-icon></button>
+                            </div>
+                        </div>
+                        <div class="student">
+                            <span>Employee 4</span>
+                            <div class="student-buttons">
+                                <button><lord-icon src="https://cdn.lordicon.com/exymduqj.json" trigger="hover"
+                                        stroke="bold" colors="primary:#ffffff,secondary:#ffffff"
+                                        style="width:35px;height:35px">
+                                    </lord-icon></button>
+                                <button><lord-icon src="https://cdn.lordicon.com/hwjcdycb.json" trigger="hover"
+                                        stroke="bold" colors="primary:#ffffff,secondary:#ffffff"
+                                        style="width:35px;height:35px">
+                                    </lord-icon></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Add New Entry Button -->
+                    <a href="new_emp_details.html"><button class="add-button"><span>New</span><lord-icon src="https://cdn.lordicon.com/sbnjyzil.json" trigger="hover" stroke="bold"
+                        colors="primary:#ffffff,secondary:#e4e4e4" style="width:45px;height:45px">
+                    </lord-icon><span>Entry</span></button></a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+</body>
+
+</html>
