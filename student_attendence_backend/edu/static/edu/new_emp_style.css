@@ -1,0 +1,236 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #111;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Container */
+.container {
+    display: flex;
+    width: 90%;
+    height: 90vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 60px;
+    height: 100vh;
+    background: #2a2a40;
+    position: fixed;
+    left: 0;
+    top: 0;
+    transition: width 0.45s ease-in-out;
+    overflow: hidden;
+    white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sidebar:hover {
+    width: 250px;
+}
+
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+.sidebar nav a {
+    display: flex;
+    align-items: center;
+    color: white;
+    justify-content: center;
+    padding: 15px;
+    text-decoration: none;
+    opacity: 1;
+    transition: opacity 0.45s ease-in-out;
+    width: 100%;
+}
+
+.sidebar:hover nav a {
+    opacity: 1;
+}
+
+.sidebar nav a span {
+    display: none;
+    margin-left: 10px;
+}
+
+.sidebar:hover nav a span {
+    display: inline;
+}
+
+.sidebar nav a .icon {
+    width: 50px;
+    height: 50px;
+}
+
+/* Main Content */
+.main-content {
+    margin-left: 60px;
+    transition: margin-left 0.3s ease-in-out;
+    flex: 1;
+    padding: 20px;
+}
+
+.sidebar:hover + .main-content {
+    margin-left: 250px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    justify-content: center;
+    background: #282841;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.dashboard {
+    margin-top: 5px; /* This ensures space between top-right and the grid */
+}
+
+.top-right {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.profession-btn,
+.dark-toggle {
+    background: #494976;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+.profile-pic {
+    width: 40px;
+    height: 40px;
+    background: gray;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.profile-pic img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+/* Form Card */
+.form-card {
+    margin-top: 20px; /* Increases space from the top */
+    margin-bottom: 20px; /* Adds space below */
+    margin-left: auto;  /* Centers horizontally */
+    margin-right: auto; /* Centers horizontally */
+    background: #2a2a40;
+    color: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 85%; /* Ensuring a proper width */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.form-card input {
+    background-color: transparent;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-bottom: 2px solid white; /* Adds an underline */
+    border-radius: 0; /* Removes any unwanted rounding */
+    width: 100%; /* Adjusted width to fit inside card */
+    text-align: center;
+    font-size: 16px;
+    outline: none; /* Removes default focus outline */
+}
+
+/* Styling the placeholder */
+.form-card input::placeholder {
+    color: rgba(255, 255, 255, 0.6); /* Light white color for placeholder */
+}
+
+/* Date Picker Styling */
+.form-card input[type="date"] {
+    background-color: transparent;
+    color: rgba(255, 255, 255, 0.6);
+    padding: 10px;
+    border: none;
+    border-bottom: 2px solid white; /* Adds an underline */
+    border-radius: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+    outline: none;
+    appearance: none; /* Hides default styling on some browsers */
+    position: relative;
+}
+
+/* Change the color of the calendar icon */
+.form-card input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1); /* Makes the icon white */
+    cursor: pointer;
+}
+
+/* Button Container */
+.save {
+    display: flex;
+    justify-content: center; /* Centers buttons horizontally */
+    align-items: center; /* Aligns vertically */
+    gap: 20px; /* Adds space between buttons */
+    margin-top: 15px; /* Adjust as needed */
+}
+
+/* Save Button */
+.save-button,
+.phtoto {
+    background-color: #494976;
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    width: 50%; /* Adjust size */
+    max-width: 380px; /* Prevents button from getting too wide */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* Hover Effect */
+.save-button:hover,
+.phtoto:hover {
+    background-color: #777;
+}

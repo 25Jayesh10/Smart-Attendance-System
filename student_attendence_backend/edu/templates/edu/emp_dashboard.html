@@ -1,0 +1,176 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{%static 'edu/emp_style.css'%}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <lord-icon src="https://cdn.lordicon.com/eouimtlu.json" trigger="hover" colors="primary:#ffffff"
+                style="width:60px;height:50px">
+            </lord-icon>
+            <nav>
+                <a href="{%url 'edu:emp_dashboard'%}">
+                    <lord-icon class="icon" src="https://cdn.lordicon.com/cnpvyndp.json" trigger="hover"
+                        colors="primary:#ffffff" style="width:50px;height:50px">
+                    </lord-icon>
+                    <span>Home</span>
+                </a>
+                <a href="{%url 'accounts:logout'%}">
+                    <lord-icon src="https://cdn.lordicon.com/gwvmctbb.json" trigger="hover" stroke="bold"
+                        colors="primary:#ffffff,secondary:#e4e4e4" style="width:50px;height:50px">
+                    </lord-icon>
+                    <span>Logout</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header>
+                <div class="top-right">
+                    <button class="profession-btn">PROFESSION, NAME</button>
+                    <div class="profile-pic"><img src="images/profile.jpg"></img></div>
+                    <button class="dark-toggle">PROFESSION, NAME</button>
+                </div>
+            </header>
+
+            <div class="dashboard">
+                <div class="card">
+                    <h2>TOTAL HOURS ATTENDED IN THE CURRENT MONTH AND TILL TODAY</h2>
+                    <canvas id="barChart"></canvas>
+                </div>
+                <div class="card">
+                    <h2>Attendence Till Today</h2>
+                    <div class="speedometer-container">
+                        <svg class="speedometer" viewBox="0 0 100 50" width="300" height="300">
+                            <!-- Background Arc -->
+                            <path d="M10,50 A40,40 0 0,1 90,50" fill="none" stroke="#555" stroke-width="8" />
+                            <!-- Progress Arc -->
+                            <path id="progressArc" d="M10,50 A40,40 0 0,1 90,50" fill="none" stroke="lime"
+                                stroke-width="8" stroke-dasharray="125" stroke-dashoffset="125" />
+                            <!-- Needle -->
+                            <line id="needle" x1="50" y1="50" x2="50" y2="10" stroke="red" stroke-width="3"
+                                class="needle" />
+                        </svg>
+                        <div class="progress-text" id="progressText">0%</div>
+                    </div>
+
+                    <button class="progress" onclick="fetchProgress()">Check Attendence</button>
+                </div>
+                <div class="card">
+                    <h2>Alerts</h2>
+                    <div class="alert-container">
+                        <div class="alert">
+                            <span class="alert-icon">⚠️</span> Assignment submission deadline approaching!
+                        </div>
+                        <div class="alert">
+                            <span class="alert-icon">📢</span> Chemistry class rescheduled to 3:00 PM.
+                        </div>
+                        <div class="alert">
+                            <span class="alert-icon">🛑</span> Attendance below 75%, meet the faculty for assistance.
+                        </div>
+                        <div class="alert">
+                            <span class="alert-icon">🔔</span> Workshop on AI scheduled for tomorrow at 10:00 AM.
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h2>Attendence for Today</h2>
+                    <canvas id="pieChart"></canvas>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+</body>
+
+<script src="https://cdn.lordicon.com/lordicon.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const ctx1 = document.getElementById("barChart").getContext("2d");
+        new Chart(ctx1, {
+            type: "bar",
+            data: {
+                labels: ["Maths", "Chemistry", "Physics", "English", "Hindi"],
+                datasets: [{
+                    label: "Hours",
+                    data: [60, 13.3, 100, 50, 80],
+                    backgroundColor: "#4A90E2"
+                }]
+            }
+        });
+
+        const ctx2 = document.getElementById("pieChart").getContext("2d");
+        new Chart(ctx2, {
+            type: "pie",
+            data: {
+                labels: ["Maths", "Chemistry", "Physics", "English", "Hindi"],
+                datasets: [{
+                    data: [60, 13.3, 100, 50, 80],
+                    backgroundColor: ["#4A90E2", "#50E3C2", "#F5A623", "#D0021B", "#9013FE"]
+                }]
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            let progressValue = 70; // Change this value to adjust the progress
+            const progressFill = document.getElementById("progress-fill");
+
+            progressFill.style.width = progressValue + "%";
+            progressFill.innerText = progressValue + "%";
+        });
+
+        const SERVER_URL = "http://192.168.150.98:8000/progress"; // API to fetch progress data
+
+        async function fetchProgress() {
+            try {
+                const response = await fetch(SERVER_URL);
+                const data = await response.json();
+
+                if (data && typeof data.percentage === "number") {
+                    updateSpeedometer(data.percentage);
+                } else {
+                    console.error("Invalid response data:", data);
+                }
+            } catch (error) {
+                console.error("Error fetching progress:", error);
+            }
+        }
+
+        function updateSpeedometer(percentage) {
+            if (percentage < 0) percentage = 0;
+            if (percentage > 100) percentage = 100;
+
+            const progressArc = document.getElementById("progressArc");
+            const needle = document.getElementById("needle");
+            const progressText = document.getElementById("progressText");
+
+            // Invert arc offset (0% is full, 100% is empty)
+            let offset = 125 - (percentage / 100) * 125;
+            progressArc.style.strokeDashoffset = offset;
+
+            // Rotate needle (0% starts at right, 100% at left)
+            let angle = -90 + (percentage / 100) * 180;
+            needle.style.transform = `rotate(${angle}deg)`;
+
+            // Update text
+            progressText.innerText = `${percentage}%`;
+        }
+
+        // Auto-fetch progress every 2 seconds
+        setInterval(fetchProgress, 2000);
+    });
+</script>
+
+</html>

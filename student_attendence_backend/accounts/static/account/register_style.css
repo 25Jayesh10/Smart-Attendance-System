@@ -1,0 +1,54 @@
+/* General Page Styling */
+body {
+    background-color: #111;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Registration Box */
+.registration-container {
+    background-color: #222;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 350px;  /* Increased box width for better spacing */
+}
+
+h2 {
+    color: white;
+    margin-bottom: 15px;
+}
+
+/* Input Fields */
+input, select {
+    width: calc(100% - 20px); /* Adjust width to fit within the box */
+    padding: 12px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 5px;
+    background: #ddd;
+    font-size: 14px;
+    display: block;
+    text-align: left;
+}
+
+/* Button */
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+    background: #00adb5;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+button:hover {
+    background: #008c9e;
+}

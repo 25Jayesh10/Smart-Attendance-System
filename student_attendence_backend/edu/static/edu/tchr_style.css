@@ -1,0 +1,208 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #13131f;
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    width: 90%;
+    height: 90vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 60px;
+    height: 100vh;
+    background: #2a2a40;
+    position: fixed;
+    left: 0;
+    top: 0;
+    transition: width 0.45s ease-in-out;
+    overflow: hidden;
+    white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sidebar:hover {
+    width: 250px;
+}
+
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+.sidebar nav a {
+    display: flex;
+    align-items: center;
+    color: white;
+    justify-content: center;
+    padding: 15px;
+    text-decoration: none;
+    opacity: 1;
+    transition: opacity 0.45s ease-in-out;
+    width: 100%;
+}
+
+.sidebar:hover nav a {
+    opacity: 1;
+}
+
+.sidebar nav a span {
+    display: none;
+    margin-left: 10px;
+}
+
+.sidebar:hover nav a span {
+    display: inline;
+}
+
+.sidebar nav a .icon {
+    width: 50px;
+    height: 50px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    justify-content: center;
+    background: #282841;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+/* Top Right Section */
+.top-right {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.profession-btn,
+.dark-toggle {
+    background: #494976;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+.profile-pic {
+    width: 40px;
+    height: 40px;
+    background: gray;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.profile-pic img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+/* Main Content */
+.main-content {
+    margin-left: 60px;
+    transition: margin-left 0.3s ease-in-out;
+    flex: 1;
+    padding: 20px;
+}
+
+.sidebar:hover+.main-content {
+    margin-left: 250px;
+}
+
+/* Dashboard Grid */
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(calc(50% - 20px), 1fr));
+    gap: 20px;
+    padding: 20px;
+    transition: grid-template-columns 0.3s ease-in-out;
+}
+
+.sidebar:hover~.main-content .dashboard {
+    grid-template-columns: repeat(auto-fit, minmax(calc(45% - 20px), 1fr));
+    /* Reduce card width */
+}
+
+.card {
+    background: #2a2a40;
+    color: white;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.large {
+    grid-column: span 2;
+}
+
+.small {
+    width: 80%;
+    margin: auto;
+}
+
+/* Alerts Card */
+.alerts-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+.alerts-card input {
+    width: 90%;
+    padding: 8px;
+    border-radius: 5px;
+    border: none;
+    background: #ddd;
+    color: #111;
+}
+
+/* Alerts */
+.alert-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Increased gap between alerts */
+    margin-top: 15px;
+    text-align: left;
+}
+
+.alert {
+    background: #494976;
+    padding: 12px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: normal;
+    color: white;
+    justify-content: flex-start; /* Align content to the left */
+}
+
+.alert-icon {
+    margin-right: 10px;
+    font-size: 18px;
+}

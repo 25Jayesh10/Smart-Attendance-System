@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Form</title>
+    <link rel="stylesheet" href="{%static 'edu/new_emp_style.css'%}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.lordicon.com/lordicon.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <lord-icon src="https://cdn.lordicon.com/eouimtlu.json" trigger="hover" colors="primary:#ffffff"
+                style="width:60px;height:50px">
+            </lord-icon>
+            <nav>
+                <a href="{%url 'edu:mngr_dashboard'%}">
+                    <lord-icon class="icon" src="https://cdn.lordicon.com/cnpvyndp.json" trigger="hover"
+                        colors="primary:#ffffff" style="width:50px;height:50px">
+                    </lord-icon>
+                    <span>Home</span>
+                </a>
+                <a href="{%url 'edu:emp_details'%}">
+                    <lord-icon src="https://cdn.lordicon.com/xmaezqzk.json" trigger="hover" stroke="bold"
+                        colors="primary:#ffffff,secondary:#e4e4e4" style="width:50px;height:50px">
+                    </lord-icon>
+                    <span>Details</span>
+                </a>
+                <a href="{%url 'edu:new_emp_details'%}">
+                    <lord-icon src="https://cdn.lordicon.com/sbnjyzil.json" trigger="hover" stroke="bold"
+                        colors="primary:#ffffff,secondary:#e4e4e4" style="width:50px;height:50px">
+                    </lord-icon>
+                    <span>
+                        New Entry
+                    </span>
+                </a>
+                <a href="{%url 'accounts:logout'%}">
+                    <lord-icon src="https://cdn.lordicon.com/gwvmctbb.json" trigger="hover" stroke="bold"
+                        colors="primary:#ffffff,secondary:#e4e4e4" style="width:50px;height:50px">
+                    </lord-icon>
+                    <span>Logout</span>
+                </a>
+            </nav>
+        </aside>  
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header>
+                <div class="top-right">
+                    <button class="profession-btn">PROFESSION, NAME</button>
+                    <div class="profile-pic"><img src="images/profile.jpg"></img></div>
+                    <button class="dark-toggle">PROFESSION, NAME</button>
+                </div>
+            </header>
+
+            <!-- Form Card -->
+            <div class="form-card">
+                <input type="text" placeholder="Enter Full Name">
+                <input type="text" placeholder="Employee ID">
+                <input type="date" placeholder="Date of Birth">
+                <input type="email" placeholder="Email">
+                <input type="text" placeholder="Contact Details">
+                <input type="text" placeholder="Address">
+
+                <!-- Save Button -->
+                <div class="save">
+                    <button class="save-button">Save</button>
+                    <button class="phtoto">Click Photo</button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>

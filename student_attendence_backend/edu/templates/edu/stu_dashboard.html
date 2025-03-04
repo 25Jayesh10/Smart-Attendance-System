@@ -1,0 +1,176 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{%static 'edu/stu_style.css'%}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.lordicon.com/lordicon.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <lord-icon src="https://cdn.lordicon.com/eouimtlu.json" trigger="hover" colors="primary:#ffffff"
+                style="width:60px;height:50px">
+            </lord-icon>
+            <nav>
+                <a href="{%url 'edu:student_dashboard'%}">
+                    <lord-icon class="icon" src="https://cdn.lordicon.com/cnpvyndp.json" trigger="hover"
+                        colors="primary:#ffffff" style="width:50px;height:50px">
+                    </lord-icon>
+                    <span>Home</span>
+                </a>
+                <a href="{%url 'accounts:logout'%}">
+                    <lord-icon src="https://cdn.lordicon.com/gwvmctbb.json" trigger="hover" stroke="bold"
+                        colors="primary:#ffffff,secondary:#e4e4e4" style="width:50px;height:50px">
+                    </lord-icon>
+                    <span>Logout</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header>
+                <div class="top-right">
+                    <button class="profession-btn">{{ user_profession }}, {{ user_name }}</button>
+                    <div class="profile-pic"><img src="{% static 'edu/profile.jpg' %}" alt="Profile"></div>
+                    <button class="dark-toggle">Theme</button>
+                </div>
+            </header>
+
+            <div class="dashboard">
+                <div class="card">
+                    <h2>TOTAL HOURS ATTENDED IN THE CURRENT MONTH</h2>
+                    <canvas id="barChart"></canvas>
+                </div>
+                <div class="card">
+                    <h2>ATTENDANCE TILL TODAY(%)</h2>
+                    <div class="speedometer-container">
+                        <svg class="speedometer" viewBox="0 0 100 50" width="300" height="300">
+                            <!-- Background Arc -->
+                            <path d="M10,50 A40,40 0 0,1 90,50" fill="none" stroke="#555" stroke-width="8" />
+                            <!-- Progress Arc -->
+                            <path id="progressArc" d="M10,50 A40,40 0 0,1 90,50" fill="none" stroke="lime"
+                                stroke-width="8" stroke-dasharray="125" stroke-dashoffset="125" />
+                            <!-- Needle -->
+                            <line id="needle" x1="50" y1="50" x2="50" y2="10" stroke="red" stroke-width="3"
+                                class="needle" />
+                        </svg>
+                        <div class="progress-text" id="progressText">0%</div>
+                    </div>
+
+                    <button class="progress" onclick="fetchProgress()">Check Attendence</button>
+                </div>
+                <div class="card">
+                    <h2>Alerts</h2>
+                    <div class="alert-container">
+                        <div class="alert">
+                            <span class="alert-icon">⚠️</span> Assignment submission deadline approaching!
+                        </div>
+                        <div class="alert">
+                            <span class="alert-icon">📢</span> Chemistry class rescheduled to 3:00 PM.
+                        </div>
+                        <div class="alert">
+                            <span class="alert-icon">🛑</span> Attendance below 75%, meet the faculty for assistance.
+                        </div>
+                        <div class="alert">
+                            <span class="alert-icon">🔔</span> Workshop on AI scheduled for tomorrow at 10:00 AM.
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h2>SUBJECTWISE ATTENDANCE PERCENTAGE</h2>
+                    <canvas id="pieChart"></canvas>
+                </div>
+
+            </div>
+        </main>
+    </div>
+</body>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const ctx1 = document.getElementById("barChart").getContext("2d");
+        const ctx2 = document.getElementById("pieChart").getContext("2d");
+
+        try {
+            // Parse the Django template variables safely
+            const labels = JSON.parse('{{ labels|safe|escapejs }}' || '[]');
+            const data = JSON.parse('{{ data|safe|escapejs }}' || '[]');
+            const percentages = JSON.parse('{{ percentages|safe|escapejs }}' || '[]');
+            const avgAttendancePercentage = parseFloat('{{ avg_attendance_percentage|default:0 }}');
+
+            // Bar Chart - Hours Attended
+            new Chart(ctx1, {
+                type: "bar",
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "Hours Attended (This Month)",
+                        data: data,
+                        backgroundColor: "#4A90E2"
+                    }]
+                }
+            });
+
+            // Pie Chart - Attendance Percentage
+            new Chart(ctx2, {
+                type: "pie",
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: percentages,
+                        backgroundColor: ["#4A90E2", "#50E3C2", "#F5A623", "#D0021B", "#9013FE"]
+                    }]
+                }
+            });
+
+            // Speedometer Update Function
+            function updateSpeedometer(percentage) {
+                if (percentage < 0) percentage = 0;
+                if (percentage > 100) percentage = 100;
+
+                const progressArc = document.getElementById("progressArc");
+                const needle = document.getElementById("needle");
+                const progressText = document.getElementById("progressText");
+
+                if (progressArc && needle && progressText) {
+                    // Adjust stroke offset (125 is full, 0 is empty)
+                    let offset = 125 - (percentage / 100) * 125;
+                    progressArc.style.strokeDashoffset = offset;
+
+                    // Rotate needle (0% at left, 100% at right)
+                    let angle = -90 + (percentage / 100) * 180;
+                    needle.style.transform = `rotate(${angle}deg)`;
+
+                    // Update text
+                    progressText.innerText = `${percentage}%`;
+                }
+            }
+
+            // Initialize the speedometer
+            updateSpeedometer(avgAttendancePercentage);
+        } catch (error) {
+            console.error("Error initializing dashboard:", error);
+        }
+    });
+
+    function fetchProgress() {
+        // Add this function since it's referenced in your button onclick
+        fetch('/api/attendance-progress/') // Update this URL to match your Django URL configuration
+            .then(response => response.json())
+            .then(data => {
+                updateSpeedometer(data.percentage);
+            })
+            .catch(error => console.error('Error fetching progress:', error));
+    }
+</script>
+
+
+</html>

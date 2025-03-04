@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student add Form</title>
+    <link rel="stylesheet" href="{%static 'edu/new_stu_style.css'%}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.lordicon.com/lordicon.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <lord-icon src="https://cdn.lordicon.com/eouimtlu.json" trigger="hover" colors="primary:#ffffff"
+                style="width:60px;height:50px">
+            </lord-icon>
+            <nav>
+                <a href="{%url 'edu:teacher_dashboard'%}">
+                    <lord-icon class="icon" src="https://cdn.lordicon.com/cnpvyndp.json" trigger="hover"
+                        colors="primary:#ffffff" style="width:50px;height:50px">
+                    </lord-icon>
+                    <span>Home</span>
+                </a>
+                <a href="{%url 'edu:stu_details'%}">
+                    <lord-icon src="https://cdn.lordicon.com/xmaezqzk.json" trigger="hover" stroke="bold"
+                        colors="primary:#ffffff,secondary:#e4e4e4" style="width:50px;height:50px">
+                    </lord-icon>
+                    <span>Details</span>
+                </a>
+                <a href="{% url 'edu:stu_add'%}">
+                    <lord-icon src="https://cdn.lordicon.com/sbnjyzil.json" trigger="hover" stroke="bold"
+                        colors="primary:#ffffff,secondary:#e4e4e4" style="width:50px;height:50px">
+                    </lord-icon>
+                    <span>
+                        New Entry
+                    </span>
+                </a>
+                <a href="{%url 'accounts:logout'%}">
+                    <lord-icon src="https://cdn.lordicon.com/gwvmctbb.json" trigger="hover" stroke="bold"
+                        colors="primary:#ffffff,secondary:#e4e4e4" style="width:50px;height:50px">
+                    </lord-icon>
+                    <span>Logout</span>
+                </a>
+            </nav>
+        </aside>  
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header>
+                <div class="top-right">
+                    <button class="profession-btn">PROFESSION, NAME</button>
+                    <div class="profile-pic"><img src="images/profile.jpg"></img></div>
+                    <button class="dark-toggle">PROFESSION, NAME</button>
+                </div>
+            </header>
+
+            <!-- Form Card -->
+            <div class="form-card">
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="text" name="full_name" placeholder="Enter Full Name" required>
+                    <input type="text" name="roll_no" placeholder="Roll Number" required>
+                    <input type="date" name="date_of_birth" placeholder="Date of Birth" required>
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="text" name="contact_details" placeholder="Contact Details" required>
+                    <input type="text" name="address" placeholder="Address" required>
+                
+                    <!-- Save Button -->
+                    <div class="save">
+                        <button type="submit" class="save-button">Save</button>
+                        <a href="final_index.html"><button type="button" class="phtoto">Click Photo</button></a>
+                    </div>
+                </form>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>
