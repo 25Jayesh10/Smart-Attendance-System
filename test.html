@@ -1,0 +1,47 @@
+const express = require("express");
+const bodyParser = require("body-parser");
+const fs = require("fs");
+const path = require("path");
+
+const app = express();
+const PORT = 3000;
+
+// Middleware to parse JSON data
+app.use(bodyParser.json({ limit: "50mb" }));
+
+// Create images directory if not exists
+const imageDir = path.join(__dirname, "captured_images");
+if (!fs.existsSync(imageDir)) {
+    fs.mkdirSync(imageDir);
+}
+
+// Image Upload Endpoint
+app.post("/upload", (req, res) => {
+    const { image, filename } = req.body;
+
+    if (!image || !filename) {
+        return res.status(400).json({ message: "Missing image data or filename" });
+    }
+
+    try {
+        // Remove base64 header
+        const base64Data = image.replace(/^data:image\/png;base64,/, "");
+        const filePath = path.join(imageDir, filename);
+
+        // Save image to file
+        fs.writeFileSync(filePath, base64Data, "base64");
+
+        res.json({ message: "Image saved successfully", filename });
+    } catch (error) {
+        console.error("Error saving image:", error);
+        res.status(500).json({ message: "Error saving image" });
+    }
+});
+
+
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "index.html"));
+});
+app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
+});

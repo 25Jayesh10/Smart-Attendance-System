@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Status Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e2f;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        .dashboard {
+            padding: 20px;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #282841;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .card {
+            background: #2a2a40;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .down { color: red; }
+        .up { color: yellow; }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <header>
+            <h1>Project Status Dashboard</h1>
+            <div class="dropdowns">
+                <select><option>IT Career Map</option></select>
+                <select><option>5 Selected</option></select>
+            </div>
+        </header>
+        
+        <div class="grid-container">
+            <div class="card">
+                <h2>Project Cost Performance</h2>
+                <p><strong>$93,332</strong> Total budget</p>
+                <p><strong>$48,048</strong> Actual Cost</p>
+                <canvas id="gaugeChart"></canvas>
+            </div>
+            
+            <div class="card">
+                <h2>Project Performance</h2>
+                <p><span class="down">⬇</span> SPI: <strong>0.89</strong></p>
+                <p><span class="up">⬆</span> CPI: <strong>0.87</strong></p>
+                <p>Planned Value: <strong>$46,666.00</strong></p>
+                <p>Earned Value: <strong>$41,579.40</strong></p>
+            </div>
+            
+            <div class="card">
+                <h2>Time Vs Project Phase</h2>
+                <canvas id="barChart"></canvas>
+            </div>
+            
+            <div class="card">
+                <h2>Project Phase % Completed</h2>
+                <canvas id="pieChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const ctx1 = document.getElementById("barChart").getContext("2d");
+            new Chart(ctx1, {
+                type: "bar",
+                data: {
+                    labels: ["Closure Stage", "Execution Stage", "Monitor & Control", "Project Initiation", "Planning"],
+                    datasets: [{
+                        label: "Hours",
+                        data: [56, 164, 36, 40, 144],
+                        backgroundColor: "#4A90E2"
+                    }]
+                }
+            });
+
+            const ctx2 = document.getElementById("pieChart").getContext("2d");
+            new Chart(ctx2, {
+                type: "pie",
+                data: {
+                    labels: ["Planning", "Initiation", "Execution", "Monitor & Control", "Closure"],
+                    datasets: [{
+                        data: [60, 13.3, 100, 0, 0],
+                        backgroundColor: ["#4A90E2", "#50E3C2", "#F5A623", "#D0021B", "#9013FE"]
+                    }]
+                }
+            });
+        });
+    </script>
+</body>
+</html>

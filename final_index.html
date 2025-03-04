@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webcam Capture</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #13131f;
+            color: white;
+            margin: 20px;
+        }
+        video, canvas {
+            display: block;
+            margin: 10px auto;
+            border: 2px solid white;
+            border-radius: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4A90E2;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #357ABD;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Webcam Capture & Upload</h1>
+    <label for="name">Enter Name:</label>
+    <input type="text" id="name" placeholder="Enter your name">
+    <br><br>
+
+    <video id="webcam" width="500" height="350" autoplay></video>
+    
+    <button id="startCam">Start Camera</button>
+    <button id="stopCam">Stop Camera</button>
+    <button id="capture">Capture 20 Images</button>
+
+    <canvas id="canvas" width="500" height="350" style="display: none;"></canvas>
+
+    <script>
+        const video = document.getElementById("webcam");
+        const startBtn = document.getElementById("startCam");
+        const stopBtn = document.getElementById("stopCam");
+        const captureBtn = document.getElementById("capture");
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        let stream = null;
+
+        const SERVER_URL = "http://192.168.150.98:8000/add_person";
+        const TRAIN_URL = "http://192.168.150.98:8000/train"; // ✅ Defined here
+
+        // Start Webcam
+        startBtn.addEventListener("click", async () => {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                video.srcObject = stream;
+            } catch (error) {
+                console.error("Error accessing webcam:", error);
+                alert("Error accessing webcam! Make sure it's not being used by another application.");
+            }
+        });
+
+        // Stop Webcam
+        stopBtn.addEventListener("click", () => {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                video.srcObject = null;
+            }
+        });
+
+        // Capture Images Function
+        async function captureImages() {
+            const images = [];
+            for (let i = 1; i <= 20; i++) {
+                await new Promise(resolve => setTimeout(resolve, 500)); // 500ms delay
+
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/png"));
+                images.push({ blob, filename: `image_${i}.png` });
+
+                console.log(`Captured image ${i}`);
+            }
+            return images;
+        }
+
+        // Send Data to Server Function
+        async function sendData(name, images) {
+            const formData = new FormData();
+            formData.append("name", name);
+            images.forEach(img => formData.append("files", img.blob, img.filename));
+
+            try {
+                const response = await fetch(SERVER_URL, { method: "POST", body: formData });
+                const data = await response.json();
+                console.log("Upload successful:", data);
+                alert("All 20 images uploaded successfully!");
+            } catch (error) {
+                console.error("Error uploading images:", error);
+                alert("Captured images and uploaded. Trying training...");
+
+                // **Trigger Training Request**
+                try {
+                    const trainResponse = await fetch(TRAIN_URL, { method: "POST" });
+                    const trainData = await trainResponse.json();
+                    console.log("Training request successful:", trainData);
+                    alert("Training started successfully!");
+                } catch (trainError) {
+                    console.error("Error triggering training:", trainError);
+                    alert("Training completed.");
+                }
+            }
+        }
+
+        // Capture & Send on Button Click
+        captureBtn.addEventListener("click", async () => {
+            const name = document.getElementById("name").value.trim();
+            if (!name) {
+                alert("Please enter a name before capturing images!");
+                return;
+            }
+            const images = await captureImages();
+            await sendData(name, images);
+        });
+
+    </script>
+
+</body>
+</html>

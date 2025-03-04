@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Speedometer</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background-color: #13131f;
+            color: white;
+        }
+        .speedometer-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 50px auto;
+        }
+        .speedometer {
+            transform: rotate(0deg);
+        }
+        .needle {
+            transform-origin: 50% 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+        .progress-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            bottom: 10px;
+            font-size: 20px;
+        }
+        button {
+            padding: 10px;
+            margin-top: 20px;
+            font-size: 16px;
+            background-color: #4A90E2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Dynamic Speedometer</h1>
+
+    <div class="speedometer-container">
+        <svg class="speedometer" viewBox="0 0 100 50" width="200" height="100">
+            <!-- Background Arc -->
+            <path d="M10,50 A40,40 0 0,1 90,50" fill="none" stroke="#555" stroke-width="8"/>
+            <!-- Progress Arc -->
+            <path id="progressArc" d="M10,50 A40,40 0 0,1 90,50" fill="none" stroke="lime" stroke-width="8" stroke-dasharray="125" stroke-dashoffset="125"/>
+            <!-- Needle -->
+            <line id="needle" x1="50" y1="50" x2="50" y2="10" stroke="red" stroke-width="3" class="needle"/>
+        </svg>
+        <div class="progress-text" id="progressText">0%</div>
+    </div>
+
+    <button onclick="fetchProgress()">Fetch Progress</button>
+
+    <script>
+        const SERVER_URL = "http://192.168.150.98:8000/progress"; // API to fetch progress data
+
+        async function fetchProgress() {
+            try {
+                const response = await fetch(SERVER_URL);
+                const data = await response.json();
+
+                if (data && typeof data.percentage === "number") {
+                    updateSpeedometer(data.percentage);
+                } else {
+                    console.error("Invalid response data:", data);
+                }
+            } catch (error) {
+                console.error("Error fetching progress:", error);
+            }
+        }
+
+        function updateSpeedometer(percentage) {
+            if (percentage < 0) percentage = 0;
+            if (percentage > 100) percentage = 100;
+
+            const progressArc = document.getElementById("progressArc");
+            const needle = document.getElementById("needle");
+            const progressText = document.getElementById("progressText");
+
+            // Invert arc offset (0% is full, 100% is empty)
+            let offset = 125 - (percentage / 100) * 125;
+            progressArc.style.strokeDashoffset = offset;
+
+            // Rotate needle (0% starts at right, 100% at left)
+            let angle = -90 + (percentage / 100) * 180;
+            needle.style.transform = `rotate(${angle}deg)`;
+
+            // Update text
+            progressText.innerText = `${percentage}%`;
+        }
+
+        // Auto-fetch progress every 2 seconds
+        setInterval(fetchProgress, 2000);
+    </script>
+
+</body>
+</html>
